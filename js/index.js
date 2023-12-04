@@ -1,3 +1,4 @@
+// 这是一个构造函数 WechatMarkdownEdit ()，负责调用其他的方法，是一个启动函数
 function WechatMarkdownEdit () {
   // init 参数
   this.editorEle = this.getElement('#editor');
@@ -187,25 +188,30 @@ WechatMarkdownEdit.prototype.initEditor = function () {
   return editor
 }
 
-// 自定义 css
+// 1-自定义 css
 WechatMarkdownEdit.prototype.customizeStyle = function () {
   let that = this;
   let pageListLis = that.getElementAll('#page-list > li');
 
+  // 1.1-判断是否点击自定义样式按钮
   that.selfStyleBtn.onclick = function () {
+    // 1.1.1-设置默认的编辑器，themeDefaultText为theme-text中的变量，设置编辑器中默认显示的内容
     that.editor.setValue(themeDefaultText);
 
+    // 1.1.2-判断本地是否存储defaultcss字段，如果没有则获取默认的自定义样式，在theme-text的defaultCss变量中
     if (!localStorage.getItem('defaultcss')) {
       localStorage.setItem('defaultcss', defaultCss);
     }
 
+    //1.1.3-进入自定义css样式编辑状态
     if (that.selfStyleBtn.innerHTML === '自定义样式') {
+      // 1.1.3.1-切换按钮状态，进入自定义编辑状态
       that.editor.display.wrapper.style.display = 'none';
       that.selfStyleBtn.innerHTML = '保存';
 
+      // 1.1.3.2-给预览器添加自定义的默认样式defaultcss
       if (that.getElement('#style-wrap') === null) {
         let style = document.createElement('style');
-
         style.id = 'style-wrap';
 
         that.getElement('head').appendChild(style);
@@ -215,6 +221,7 @@ WechatMarkdownEdit.prototype.customizeStyle = function () {
         that.styleWrap.innerHTML = localStorage.getItem('defaultcss');
       }
 
+      //1.1.3.3-给CSS代码编辑器进行初始化，如果样式修改器没定义过就定义，定义过就直接显示出来
       if (typeof that.styleEditor === 'undefined') {
         that.styleEditor = CodeMirror.fromTextArea(that.styleTextareaEle, {
           lineNumbers: true,
@@ -228,29 +235,32 @@ WechatMarkdownEdit.prototype.customizeStyle = function () {
       } else {
         that.styleEditor.display.wrapper.style.display = 'block';
       }
+      // 1.1.4-保存返回markdown内容编辑状态
     } else {
       that.selfStyleBtn.innerHTML = '自定义样式';
       that.styleEditor.display.wrapper.style.display = 'none';
       that.editor.display.wrapper.style.display = 'block';
-      localStorage.setItem('defaultcss', that.styleEditor.getValue());
+      localStorage.setItem('defaultcss', that.styleEditor.getValue());//本地css样式获取最新修改的
 
-
+      // 1.1.4.1-将文本样式由default样式切换为自定义样式
       pageListLis[that.themeListActiveIndex[1]].classList.remove('li-active');
       pageListLis[0].classList.add('li-active');
       that.themeListActiveIndex[1] = 0;
       let activeListStr = JSON.stringify(that.themeListActiveIndex)
+      // 本地存储后，下次启动会获取并判断使用哪个样式【0，1，2，3】
       localStorage.setItem('activeList', activeListStr);
     }
 
-    that.styleEditor.setValue(localStorage.getItem('defaultcss'));
+    that.styleEditor.setValue(localStorage.getItem('defaultcss'));//将修改过的自定义样式进行应用
 
+    //监听样式修改器的内容是否由变化，有的话更新前端css的代码编辑器内容的显示
     that.styleEditor.on('change', function () {
       that.styleWrap.innerHTML = that.styleEditor.getValue();
     });
   }
 }
 
-// 渲染
+// 预览示图渲染
 WechatMarkdownEdit.prototype.renderMarkdown = function () {
   let that = this;
 
@@ -317,11 +327,13 @@ WechatMarkdownEdit.prototype.scrollAsync = function () {
   }
 }
 
-// 复制排版好的内容
+// 2-复制排版好的内容
 WechatMarkdownEdit.prototype.copy = function () {
+  // 2.1-初始化clipboard------https://clipboardjs.com/
   let clipboard = new ClipboardJS('#copy');
 
   clipboard.on('success', function (e) {
+    // tata是弹窗属性
     tata.success('复制成功', '可前往公众号粘贴了(￣▽￣)"', {
       position: 'tm',
       duration: 1500
@@ -520,6 +532,7 @@ window.onload = function () {
   new WechatMarkdownEdit().init();
 }
 
+// 在页面加载完后，会 将加载页面隐藏掉，将容器内容展示出来
 window.addEventListener('load', function () {
   this.document.getElementById('loading').style.display = 'none';
   this.document.getElementById('container').style.visibility = 'visible';

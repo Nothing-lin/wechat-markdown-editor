@@ -359,8 +359,8 @@ WechatMarkdownEdit.prototype.buttonEvent = function () {
     that.settingWrap.style.transform = 'translateX(100%)';
     that.settingWrap.style.opacity = '0';
     if (typeof that.themeActiveIndex !== 'undefined') {
-      that.themeGroup[that.themeActiveIndex].children[0].children[0].style.transform = 'rotateZ(180deg)';
-      that.themeGroup[that.themeActiveIndex].children[0].classList.remove('theme-active');
+      that.themeGroup[that.themeActiveIndex].children[3].children[3].style.transform = 'rotateZ(180deg)';
+      that.themeGroup[that.themeActiveIndex].children[3].classList.remove('theme-active');
       that.themeGroup[that.themeActiveIndex].children[1].style.height = '0px';
     }
   }

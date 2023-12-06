@@ -81,3 +81,19 @@
   margin: 0;
   color: #0C8918;
 }
+
+
+.paper mark{
+  /* font-size: 16px; */
+  background-color: #ffffff00;
+  line-height: 1.5;
+  display: inline;
+  text-decoration: none;
+  background-image: radial-gradient(circle at center, #93dfb5 60%, transparent 39%);
+  background-repeat: repeat-x;
+  background-size: 11px 2.5px;
+  background-position: 0 100%;
+  padding-bottom: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
